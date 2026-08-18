@@ -121,7 +121,8 @@ class ComfyUIProvider(MediaProvider):
         for node_output in outputs.values():
             if not isinstance(node_output, dict):
                 continue
-            for key in ("videos", "gifs", "images", "audio"):
+            # Audio is owned by TTSProvider; only return renderer-supported visuals.
+            for key in ("videos", "gifs", "images"):
                 values = node_output.get(key, [])
                 if isinstance(values, list) and values and isinstance(values[0], dict):
                     return values[0]

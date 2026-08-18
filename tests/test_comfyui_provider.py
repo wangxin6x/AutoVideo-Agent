@@ -62,6 +62,29 @@ def test_comfyui_video_output_is_normalized(tmp_path):
     assert artifact.asset_path.endswith(".mp4")
 
 
+def test_comfyui_skips_audio_before_visual_output(tmp_path):
+    def opener(request, timeout):
+        if request.full_url.endswith("/prompt"):
+            return Response(b'{"prompt_id":"job-mixed"}')
+        if "/history/job-mixed" in request.full_url:
+            return Response(b'{"job-mixed":{"outputs":{"9":{"audio":[{"filename":"voice.wav"}],"images":[{"filename":"visual.png"}]}}}}')
+        return Response(b"PNG")
+
+    artifact = provider(tmp_path, opener).render_scene(scene(), tmp_path / "media")
+    assert artifact.asset_type == "image"
+    assert artifact.metadata["filename"] == "visual.png"
+
+
+def test_comfyui_audio_only_output_is_treated_as_missing(tmp_path):
+    def opener(request, timeout):
+        if request.full_url.endswith("/prompt"):
+            return Response(b'{"prompt_id":"job-audio"}')
+        return Response(b'{"job-audio":{"outputs":{"9":{"audio":[{"filename":"voice.wav"}]}}}}')
+
+    with pytest.raises(ProviderError, match="timed out"):
+        provider(tmp_path, opener, timeout=0.01).render_scene(scene(), tmp_path / "media")
+
+
 def test_comfyui_retries_transient_transport_error(tmp_path):
     attempts = {"count": 0}
 

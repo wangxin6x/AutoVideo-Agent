@@ -36,6 +36,9 @@ def qa_build(build_dir: str | Path) -> dict[str, Any]:
         except json.JSONDecodeError:
             failures.append("manifest.json is invalid JSON")
             manifest = {}
+        if not isinstance(manifest, dict):
+            failures.append("manifest.json root must be an object")
+            manifest = {}
     checks.append({"name": "manifest exists", "status": "PASS" if manifest_path.is_file() else "FAIL"})
     entries = manifest.get("timeline", [])
     if entries:

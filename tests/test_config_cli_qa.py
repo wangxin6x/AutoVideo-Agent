@@ -69,6 +69,13 @@ def test_qa_invalid_timeline_returns_fail(tmp_path):
     assert any("timeline" in failure for failure in report["failures"])
 
 
+def test_qa_non_object_manifest_returns_fail(tmp_path):
+    (tmp_path / "manifest.json").write_text("[]", encoding="utf8")
+    report = qa_build(tmp_path)
+    assert report["status"] == "FAIL"
+    assert "manifest.json root must be an object" in report["failures"]
+
+
 def test_qa_includes_renderer_warnings(tmp_path):
     (tmp_path / "manifest.json").write_text('{"timeline":[],"render":{"warnings":["source video is shorter"]}}', encoding="utf8")
     report = qa_build(tmp_path)
