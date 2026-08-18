@@ -36,12 +36,21 @@ autovideo run examples/demo-script.md
 
 ## 快速开始
 
+从 PyPI 安装：
+
+~~~powershell
+python -m pip install autovideo-agent
+~~~
+
+如需运行仓库 Demo，请克隆仓库以取得示例脚本：
+
 ~~~powershell
 git clone https://github.com/wangxin6x/AutoVideo-Agent.git
 cd AutoVideo-Agent
-python -m pip install -e .
 autovideo run examples/demo-script.md
 ~~~
+
+wheel 包含 `autovideo` CLI 和运行时包；`examples/` 是仓库中的演示输入。安装 PyPI 包后可以直接使用自己的 Markdown 脚本，或克隆仓库运行上述 Demo。
 
 ## Features
 

@@ -38,12 +38,21 @@ The build is written to build/demo-script/. Open video.mp4 when FFmpeg is availa
 
 ## Quick Start
 
+Install the package from PyPI:
+
+~~~bash
+python -m pip install autovideo-agent
+~~~
+
+To run the repository demo, clone the repository for its example script:
+
 ~~~bash
 git clone https://github.com/wangxin6x/AutoVideo-Agent.git
 cd AutoVideo-Agent
-python -m pip install -e .
 autovideo run examples/demo-script.md
 ~~~
+
+The wheel contains the `autovideo` CLI and runtime package. `examples/` is a repository fixture, so use your own Markdown script after installing from PyPI or clone the repository to run this demo.
 
 FFmpeg is optional. With it, the output is an H.264 MP4 with a silent AAC track. Without it, scene cards, manifest, WAV timeline, and QA report are still produced.
 

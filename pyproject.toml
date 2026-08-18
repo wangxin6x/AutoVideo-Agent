@@ -1,22 +1,35 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "autovideo-agent"
 version = "0.2.0"
-description = "A deterministic, local-first Markdown-to-video pipeline for agent workflows."
+description = "Agent-friendly Markdown-to-video automation pipeline with reproducible rendering and pluggable media providers."
 readme = "README.md"
 requires-python = ">=3.10"
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{ name = "AutoVideo-Agent contributors" }]
 classifiers = [
-  "Development Status :: 3 - Alpha",
-  "License :: OSI Approved :: MIT License",
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Multimedia :: Video",
 ]
+keywords = ["video automation", "markdown", "agent workflow", "ffmpeg"]
 dependencies = ["PyYAML>=6.0"]
+
+[project.urls]
+Repository = "https://github.com/wangxin6x/AutoVideo-Agent"
+Issues = "https://github.com/wangxin6x/AutoVideo-Agent/issues"
+Changelog = "https://github.com/wangxin6x/AutoVideo-Agent/blob/main/CHANGELOG.md"
 
 [project.scripts]
 autovideo = "autovideo.cli:main"
