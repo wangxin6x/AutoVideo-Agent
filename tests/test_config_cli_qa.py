@@ -33,9 +33,32 @@ def test_qa_missing_manifest_fails(tmp_path):
     assert (tmp_path / "report.json").exists()
 
 
-def test_cli_qa_passes_v2_build():
-    assert main(["qa", "build/v2-offline"]) == 0
-    report = json.loads(Path("build/v2-offline/report.json").read_text(encoding="utf8"))
+def test_cli_qa_passes_v2_build(tmp_path, monkeypatch):
+    build = tmp_path / "v2-build"
+    media = build / "media"
+    audio = build / "audio"
+    media.mkdir(parents=True)
+    audio.mkdir()
+    (media / "scene-001.ppm").write_bytes(b"media")
+    (audio / "scene-001.wav").write_bytes(b"audio")
+    (build / "video.mp4").write_bytes(b"video")
+    manifest = {
+        "duration": 1.0,
+        "timeline": [{
+            "scene_id": "1",
+            "start": 0.0,
+            "end": 1.0,
+            "duration": 1.0,
+            "media_asset": {"scene_id": "1", "asset_type": "image", "asset_path": "media/scene-001.ppm", "duration": 1.0, "provider": "placeholder", "metadata": {}},
+            "audio_asset": {"scene_id": "1", "audio_path": "audio/scene-001.wav", "duration": 1.0, "provider": "mock", "metadata": {}},
+            "subtitle": {"text": "hello", "start": 0.0, "end": 1.0, "duration": 1.0},
+        }],
+        "render": {"status": "rendered", "warnings": []},
+    }
+    (build / "manifest.json").write_text(json.dumps(manifest), encoding="utf8")
+    monkeypatch.setattr("autovideo.qa._probe_duration", lambda path: 1.0)
+    assert main(["qa", str(build)]) == 0
+    report = json.loads((build / "report.json").read_text(encoding="utf8"))
     assert report["status"] == "PASS"
 
 
