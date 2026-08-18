@@ -16,4 +16,12 @@ dist/
 *.secret
 *.cookie
 secrets/
+*.safetensors
+*.ckpt
+*.pth
+*.onnx
+*.gguf
+*.pt
+workflows/private*.json
+**/.comfyui-state.json
 .DS_Store

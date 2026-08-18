@@ -1,0 +1,20 @@
+{
+  "3": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 42
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Scene prompt is injected here"
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": ""
+    }
+  }
+}

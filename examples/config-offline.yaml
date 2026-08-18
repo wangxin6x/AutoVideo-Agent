@@ -1,0 +1,11 @@
+providers:
+  media:
+    type: placeholder
+  tts:
+    type: mock
+
+render:
+  width: 1280
+  height: 720
+  fps: 30
+  video_short_strategy: trim

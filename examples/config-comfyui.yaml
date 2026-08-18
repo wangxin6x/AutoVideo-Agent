@@ -1,0 +1,21 @@
+providers:
+  media:
+    type: comfyui
+    endpoint: http://127.0.0.1:8188
+    workflow: ../workflows/example-api.json
+    timeout: 120
+    poll_interval: 2
+    retries: 2
+    node_mapping:
+      prompt_node: "6"
+      prompt_input: text
+      negative_prompt_node: "7"
+      negative_prompt_input: text
+      seed_node: "3"
+      seed_input: seed
+      seed: 42
+  tts:
+    type: mock
+
+render:
+  video_short_strategy: trim

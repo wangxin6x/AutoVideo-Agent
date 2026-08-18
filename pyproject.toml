@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "autovideo-agent"
-version = "0.1.0"
+version = "0.2.0"
 description = "A deterministic, local-first Markdown-to-video pipeline for agent workflows."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -16,6 +16,7 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Topic :: Multimedia :: Video",
 ]
+dependencies = ["PyYAML>=6.0"]
 
 [project.scripts]
 autovideo = "autovideo.cli:main"

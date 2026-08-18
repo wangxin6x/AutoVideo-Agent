@@ -37,3 +37,54 @@ class Project:
             "scene_count": len(self.scenes),
             "scenes": [scene.to_dict() for scene in self.scenes],
         }
+
+
+@dataclass(frozen=True)
+class MediaArtifact:
+    """Normalized media output consumed by the renderer."""
+
+    scene_id: str
+    asset_type: str
+    asset_path: str
+    duration: float
+    provider: str
+    metadata: dict[str, Any]
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class AudioArtifact:
+    """Normalized audio output consumed by the renderer."""
+
+    scene_id: str
+    audio_path: str
+    duration: float
+    provider: str
+    metadata: dict[str, Any]
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class TimelineEntry:
+    scene_id: str
+    start: float
+    end: float
+    duration: float
+    media_asset: MediaArtifact
+    audio_asset: AudioArtifact
+    subtitle: dict[str, Any] | None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "scene_id": self.scene_id,
+            "start": self.start,
+            "end": self.end,
+            "duration": self.duration,
+            "media_asset": self.media_asset.to_dict(),
+            "audio_asset": self.audio_asset.to_dict(),
+            "subtitle": self.subtitle,
+        }

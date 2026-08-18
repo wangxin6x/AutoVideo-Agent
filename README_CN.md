@@ -13,7 +13,7 @@
 Markdown 脚本 -> Storyboard -> Scene Manifest -> Media -> Timeline -> FFmpeg -> QA -> MP4
 ~~~
 
-> v0.1 不宣传 AI 视频生成。Media 使用 deterministic placeholder scene assets；真实 provider 已列入 Roadmap。
+> 默认的 v0.1 兼容命令不宣传 AI 视频生成。v0.2 provider 模式新增 ComfyUI API 媒体，MiniMax 等托管 provider 仍在计划中。
 
 ## Demo
 
@@ -56,10 +56,12 @@ autovideo run examples/demo-script.md
 | ✅ 当前可用 | CLI | autovideo run <script.md> |
 | ✅ 当前可用 | QA 报告 | report.json |
 | ✅ 当前可用 | Codex Skill / AGENTS integration | AGENTS.md 与 skills/auto-video/SKILL.md |
+| ✅ 当前可用 | ComfyUI API 媒体 provider | API workflow 提交、轮询、重试、resume 与下载 |
+| ✅ 当前可用 | Mock 与 Command TTS | 静音 fallback 或任意本地 TTS CLI |
+| ✅ 当前可用 | Scene-level SRT 字幕 | 使用真实 TTS 音频时长 |
 | 🚧 计划中 | MiniMax | [#1](https://github.com/wangxin6x/AutoVideo-Agent/issues/1) |
-| 🚧 计划中 | ComfyUI | [#2](https://github.com/wangxin6x/AutoVideo-Agent/issues/2) |
-| 🚧 计划中 | TTS | [#3](https://github.com/wangxin6x/AutoVideo-Agent/issues/3) |
-| 🚧 计划中 | 字幕对齐 | [#4](https://github.com/wangxin6x/AutoVideo-Agent/issues/4) |
+| 🚧 计划中 | 托管 TTS 集成 | OpenAI、火山与 ElevenLabs |
+| 🚧 计划中 | 词级字幕对齐 | [#4](https://github.com/wangxin6x/AutoVideo-Agent/issues/4) |
 | 🚧 计划中 | 真实媒体适配器 | [#5](https://github.com/wangxin6x/AutoVideo-Agent/issues/5) |
 
 ## Architecture
@@ -75,8 +77,8 @@ flowchart LR
     Timeline --> Renderer[Renderer]
     Renderer --> QA[QA report]
     QA --> MP4[MP4 output]
-    VideoProvider[Video Provider - Planned] -. slot .-> Providers
-    TTSProvider[TTS Provider - Planned] -. slot .-> Providers
+    VideoProvider[ComfyUI Media Provider] -. media .-> Providers
+    TTSProvider[Mock / Command TTS] -. audio .-> Providers
     AssetProvider[Asset Provider - Planned] -. slot .-> Providers
 ~~~
 
@@ -99,7 +101,7 @@ QA 指检查命令结果以及 report.json/manifest.json，不代表已有独立
 ## Roadmap
 
 - **v0.1 ✅**：本地解析、确定性场景卡片、静音时间轴、FFmpeg MP4、降级报告、测试和 Agent onboarding。
-- **v0.2**：MiniMax [#1](https://github.com/wangxin6x/AutoVideo-Agent/issues/1)、ComfyUI [#2](https://github.com/wangxin6x/AutoVideo-Agent/issues/2)、TTS [#3](https://github.com/wangxin6x/AutoVideo-Agent/issues/3)、字幕对齐 [#4](https://github.com/wangxin6x/AutoVideo-Agent/issues/4)。
+- **v0.2（当前开发分支）**：Provider 合同、ComfyUI 媒体、Mock/Command TTS、scene-level SRT、标准 timeline、混合 renderer 与确定性 QA。MiniMax 和托管 TTS 仍在计划中。
 - **v0.3**：媒体适配器 [#5](https://github.com/wangxin6x/AutoVideo-Agent/issues/5)、跨平台 FFmpeg [#6](https://github.com/wangxin6x/AutoVideo-Agent/issues/6)、CI 渲染 [#9](https://github.com/wangxin6x/AutoVideo-Agent/issues/9)、更多格式 [#10](https://github.com/wangxin6x/AutoVideo-Agent/issues/10)。
 
 ## 社区

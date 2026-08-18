@@ -13,7 +13,7 @@ Built for Codex, Claude Code, Gemini CLI and other coding-agent workflows. v0.1 
 Markdown Script -> Storyboard -> Scene Manifest -> Media -> Timeline -> FFmpeg -> QA -> MP4
 ~~~
 
-> v0.1 does not claim AI video generation. Media uses deterministic placeholder scene assets; real providers are planned.
+> The default v0.1-compatible command does not claim AI video generation. v0.2 provider mode adds ComfyUI API media, while MiniMax and other hosted providers remain planned.
 
 ## Demo
 
@@ -60,10 +60,12 @@ FFmpeg is optional. With it, the output is an H.264 MP4 with a silent AAC track.
 | ✅ Available now | CLI | autovideo run <script.md> |
 | ✅ Available now | QA report | report.json |
 | ✅ Available now | Codex Skill / AGENTS integration | AGENTS.md and skills/auto-video/SKILL.md |
+| ✅ Available now | ComfyUI API media provider | API workflow submit, poll, retry, resume, and download |
+| ✅ Available now | Mock and command TTS providers | Silent fallback or any local TTS CLI |
+| ✅ Available now | Scene-level SRT subtitles | Timed from actual TTS audio duration |
 | 🚧 Planned | MiniMax | [#1](https://github.com/wangxin6x/AutoVideo-Agent/issues/1) |
-| 🚧 Planned | ComfyUI | [#2](https://github.com/wangxin6x/AutoVideo-Agent/issues/2) |
-| 🚧 Planned | TTS | [#3](https://github.com/wangxin6x/AutoVideo-Agent/issues/3) |
-| 🚧 Planned | Subtitle alignment | [#4](https://github.com/wangxin6x/AutoVideo-Agent/issues/4) |
+| 🚧 Planned | Hosted TTS integrations | OpenAI, Volcengine, and ElevenLabs |
+| 🚧 Planned | Word-level subtitle alignment | [#4](https://github.com/wangxin6x/AutoVideo-Agent/issues/4) |
 | 🚧 Planned | Real media adapters | [#5](https://github.com/wangxin6x/AutoVideo-Agent/issues/5) |
 
 ## Architecture
@@ -79,8 +81,8 @@ flowchart LR
     Timeline --> Renderer[Renderer]
     Renderer --> QA[QA report]
     QA --> MP4[MP4 output]
-    VideoProvider[Video Provider - Planned] -. slot .-> Providers
-    TTSProvider[TTS Provider - Planned] -. slot .-> Providers
+    VideoProvider[ComfyUI Media Provider] -. media .-> Providers
+    TTSProvider[Mock / Command TTS] -. audio .-> Providers
     AssetProvider[Asset Provider - Planned] -. slot .-> Providers
 ~~~
 
@@ -103,7 +105,7 @@ QA means checking the command result plus report.json and manifest.json; there i
 ## Roadmap
 
 - **v0.1 ✅** — Local parser, deterministic cards, silent timeline, FFmpeg MP4, degradation report, tests, and agent onboarding.
-- **v0.2** — [MiniMax #1](https://github.com/wangxin6x/AutoVideo-Agent/issues/1), [ComfyUI #2](https://github.com/wangxin6x/AutoVideo-Agent/issues/2), [TTS #3](https://github.com/wangxin6x/AutoVideo-Agent/issues/3), [subtitle alignment #4](https://github.com/wangxin6x/AutoVideo-Agent/issues/4).
+- **v0.2 (this development branch)** — Provider contracts, ComfyUI media, Mock/Command TTS, scene-level SRT, normalized timeline, mixed renderer, and deterministic QA. MiniMax and hosted TTS remain planned.
 - **v0.3** — [media adapters #5](https://github.com/wangxin6x/AutoVideo-Agent/issues/5), [cross-platform FFmpeg #6](https://github.com/wangxin6x/AutoVideo-Agent/issues/6), [CI render coverage #9](https://github.com/wangxin6x/AutoVideo-Agent/issues/9), [more formats #10](https://github.com/wangxin6x/AutoVideo-Agent/issues/10).
 
 ## Community
