@@ -19,8 +19,12 @@ def build_timeline(
     cursor = 0.0
     for scene in scenes:
         scene_id = str(scene.index)
-        media_asset = media[scene_id]
-        audio_asset = audio[scene_id]
+        media_asset = media.get(scene_id)
+        audio_asset = audio.get(scene_id)
+        if media_asset is None:
+            raise KeyError(f"Scene {scene_id}: no media asset found")
+        if audio_asset is None:
+            raise KeyError(f"Scene {scene_id}: no audio asset found")
         duration = audio_asset.duration if audio_asset.duration > 0 else scene.duration
         start = cursor
         end = start + duration

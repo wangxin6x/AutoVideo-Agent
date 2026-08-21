@@ -10,6 +10,9 @@ from .models import Project, Scene
 class ScriptParseError(ValueError):
     """Raised when a Markdown script cannot become a valid project."""
 
+_MAX_SCRIPT_LEN = 500_000
+_MAX_SCENES = 200
+
 
 _FIELD_RE = re.compile(r"^\s*(?:[-*]\s*)?(?:\*\*)?([A-Za-z][\w -]*)(?:\*\*)?\s*:\s*(.*?)\s*$")
 _SCENE_RE = re.compile(r"^##\s+(?:Scene\s*\d*\s*[:.-]?\s*)?(.*?)\s*$", re.IGNORECASE)
@@ -39,6 +42,9 @@ def parse_script(text: str, source: str = "<string>") -> Project:
     for example ``- visual: a city at night`` and ``narration: ...``.
     """
 
+    if len(text) > _MAX_SCRIPT_LEN:
+        raise ScriptParseError(f"Script exceeds maximum length of {_MAX_SCRIPT_LEN} characters")
+
     lines = text.replace("\r\n", "\n").replace("\r", "\n").splitlines()
     title = "Untitled video"
     scenes: list[dict[str, str]] = []
@@ -67,11 +73,15 @@ def parse_script(text: str, source: str = "<string>") -> Project:
         scenes.append(current)
     if not scenes:
         raise ScriptParseError(f"{source}: no scenes found; add at least one '## Scene' heading")
+    if len(scenes) > _MAX_SCENES:
+        raise ScriptParseError(f"Script has {len(scenes)} scenes, exceeding maximum of {_MAX_SCENES}")
 
     parsed: list[Scene] = []
     for index, raw in enumerate(scenes, start=1):
         scene_title = raw.get("title", f"Scene {index}").strip() or f"Scene {index}"
-        visual = raw.get("visual", raw.get("prompt", "Abstract motion background")).strip()
+        visual = raw.get("visual", raw.get("prompt", "")).strip()
+        if not visual:
+            raise ScriptParseError(f"Scene {index} '{scene_title}': missing 'visual' field")
         narration = raw.get("narration", "").strip()
         duration = _parse_duration(raw.get("duration", "3"), index)
         parsed.append(Scene(index, scene_title, visual, narration, duration, _color_for(index, scene_title)))
