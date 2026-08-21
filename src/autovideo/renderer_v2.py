@@ -35,7 +35,7 @@ def render_timeline(
     segments.mkdir(parents=True, exist_ok=True)
     warnings: list[str] = []
     if not ffmpeg:
-        return {"status": "degraded", "video": None, "ffmpeg": None, "warnings": ["FFmpeg was not found"]}
+        raise RenderError("FFmpeg is required but was not found. Install FFmpeg and ensure it is on your PATH.")
     if video_short_strategy not in {"trim", "loop"}:
         raise ValueError("video_short_strategy must be trim or loop")
 

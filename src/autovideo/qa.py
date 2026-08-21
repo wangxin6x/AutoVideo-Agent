@@ -11,7 +11,9 @@ from .timeline import TIMELINE_EPSILON, validate_timeline
 
 def _probe_duration(path: Path) -> float | None:
     ffprobe = shutil.which("ffprobe")
-    if not ffprobe or not path.is_file():
+    if not ffprobe:
+        return None
+    if not path.is_file():
         return None
     result = subprocess.run([ffprobe, "-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", str(path)], capture_output=True, text=True, check=False)
     try:
@@ -40,6 +42,8 @@ def qa_build(build_dir: str | Path) -> dict[str, Any]:
             failures.append("manifest.json root must be an object")
             manifest = {}
     checks.append({"name": "manifest exists", "status": "PASS" if manifest_path.is_file() else "FAIL"})
+    if not shutil.which("ffprobe"):
+        warnings.append("ffprobe not found — duration validation skipped")
     entries = manifest.get("timeline", [])
     if entries:
         if not isinstance(entries, list) or not all(isinstance(item, dict) for item in entries):
